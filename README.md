@@ -28,19 +28,14 @@ Clone the repo:
 ```
 PetrKrysl@Spectre MINGW64 /tmp/exp
 $ git clone https://github.com/PetrKryslUCSD/FinEtoolsVibInFluids.jl.git
-Cloning into 'FinEtoolsHeatDiff.jl'...
-remote: Enumerating objects: 111, done.
-remote: Counting objects: 100% (111/111), done.
-remote: Compressing objects: 100% (70/70), done.
-remote: Total 111 (delta 32), reused 103 (delta 27), pack-reused 0
-Receiving objects: 100% (111/111), 86.90 KiB | 2.71 MiB/s, done.
-Resolving deltas: 100% (32/32), done.
+Cloning into 'FinEtoolsVibInFluids.jl'...
+...
 ```
 Change your working directory, and run Julia:
 ```
-$ cd FinEtoolsHeatDiff.jl/
+$ cd FinEtoolsVibInFluids.jl/
 
-PetrKrysl@Spectre MINGW64 /tmp/exp/FinEtoolsHeatDiff.jl (master)
+PetrKrysl@Spectre MINGW64 /tmp/exp/FinEtoolsVibInFluids.jl (master)
 $ ~/AppData/Local/Julia-1.2.0-rc1/bin/julia.exe
                _
    _       _ _(_)_     |  Documentation: https://docs.julialang.org
@@ -54,7 +49,7 @@ $ ~/AppData/Local/Julia-1.2.0-rc1/bin/julia.exe
 Activate and instantiate the environment:
 ```
 (v1.2) pkg> activate .; instantiate
-[ Info: activating environment at `C:\Users\PETRKR~1\AppData\Local\Temp\exp\FinEtoolsHeatDiff.jl\Project.toml`.
+[ Info: activating environment at `C:\Users\PETRKR~1\AppData\Local\Temp\exp\FinEtoolsVibInFluids.jl\Project.toml`.
    Cloning default registries into `C:\Users\PetrKrysl\.julia`
    Cloning registry from "https://github.com/JuliaRegistries/General.git"
      Added registry `General` to `C:\Users\PetrKrysl\.julia\registries\General`
@@ -71,13 +66,13 @@ Activate and instantiate the environment:
 ```
 Test the package:
 ```
-(FinEtoolsHeatDiff) pkg> test
-   Testing FinEtoolsHeatDiff
+(FinEtoolsVibInFluids) pkg> test
+   Testing FinEtoolsVibInFluids
  Resolving package versions...
 Test Summary:  | Pass  Total
 Heat diffusion |   61     61
  43.754623 seconds (120.44 M allocations: 8.151 GiB, 6.38% gc time)
-   Testing FinEtoolsHeatDiff tests passed
+   Testing FinEtoolsVibInFluids tests passed
 ```
 
 ## Examples
