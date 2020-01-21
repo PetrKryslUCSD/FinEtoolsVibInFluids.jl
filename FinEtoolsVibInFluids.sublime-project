@@ -1,0 +1,12 @@
+{
+	"folders":
+	[
+		{
+			"path": "."
+		}
+	], 
+	"settings": {
+         "color_scheme": "Packages/Grun Colour Scheme/Pechi.sublime-color-scheme",
+    }
+
+}
