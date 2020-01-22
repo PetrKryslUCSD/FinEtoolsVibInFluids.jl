@@ -36,43 +36,20 @@ Change your working directory, and run Julia:
 $ cd FinEtoolsVibInFluids.jl/
 
 PetrKrysl@Spectre MINGW64 /tmp/exp/FinEtoolsVibInFluids.jl (master)
-$ ~/AppData/Local/Julia-1.2.0-rc1/bin/julia.exe
-               _
-   _       _ _(_)_     |  Documentation: https://docs.julialang.org
-  (_)     | (_) (_)    |
-   _ _   _| |_  __ _   |  Type "?" for help, "]?" for Pkg help.
-  | | | | | | |/ _` |  |
-  | | |_| | | | (_| |  |  Version 1.2.0-rc1.0 (2019-05-30)
- _/ |\__'_|_|_|\__'_|  |  Official https://julialang.org/ release
-|__/                   |
+$ ~/AppData/Local/Programs/Julia/Julia-1.5.0-DEV/bin/julia.exe
 ```
 Activate and instantiate the environment:
 ```
-(v1.2) pkg> activate .; instantiate
-[ Info: activating environment at `C:\Users\PETRKR~1\AppData\Local\Temp\exp\FinEtoolsVibInFluids.jl\Project.toml`.
-   Cloning default registries into `C:\Users\PetrKrysl\.julia`
-   Cloning registry from "https://github.com/JuliaRegistries/General.git"
-     Added registry `General` to `C:\Users\PetrKrysl\.julia\registries\General`
-   Cloning git-repo `https://github.com/PetrKryslUCSD/FinEtools.jl.git`
-  Updating git-repo `https://github.com/PetrKryslUCSD/FinEtools.jl.git`
- Installed Missings ─────────── v0.4.1
- Installed SortingAlgorithms ── v0.3.1
- Installed Arpack ───────────── v0.3.1
- Installed OrderedCollections ─ v1.1.0
- Installed DataStructures ───── v0.15.0
- Installed BinaryProvider ───── v0.5.4
- Installed StatsBase ────────── v0.30.0
-  Building Arpack → `C:\Users\PetrKrysl\.julia\packages\Arpack\cu5By\deps\build.log`
+julia> using Pkg; Pkg.activate("."); Pkg.instantiate()   
+Activating environment at `C:\Users\PKrysl\Documents\work\FinEtoolsVibInFluids\Project.toml`     
 ```
 Test the package:
 ```
 (FinEtoolsVibInFluids) pkg> test
-   Testing FinEtoolsVibInFluids
- Resolving package versions...
-Test Summary:  | Pass  Total
-Heat diffusion |   61     61
- 43.754623 seconds (120.44 M allocations: 8.151 GiB, 6.38% gc time)
-   Testing FinEtoolsVibInFluids tests passed
+Test Summary:       | Pass  Total     
+Vibration in fluids |    1      1     
+ 43.373997 seconds (66.45 M allocations: 3.625 GiB, 5.14% gc time)    
+   Testing FinEtoolsVibInFluids tests passed    
 ```
 
 ## Examples
