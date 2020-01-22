@@ -25,7 +25,7 @@ end
 Compute.  
 """
 @inline function Greens(xsource, xfield)
-    dx, dy, dz = xsource[1]-xfield[1], xsource[2]-xfield[2], xsource[3]-xfield[3]
+    dx, dy, dz = xfield[1]-xsource[1], xfield[2]-xsource[2], xfield[3]-xsource[3]
     return _G(_distance(dx, dy, dz)) 
 end
 
@@ -33,7 +33,7 @@ function _Gn(r, nxx0)#(x,x0,n)
 	#
 	# Normal derivative of the 3-D free-field Green's function for the Laplace equation
 	#
-	# x    is the position vector of the observation point
+	# x    is the position vector of the observation point (field point)
 	# x0    is the position vector of the source (same size as x0)
 	#         r=(x-x0);
 	#         g = 1/(4*pi)*((n*r')/(norm(r)^3));
@@ -46,7 +46,7 @@ end
 We are assuming the normal to point INTO THE FLUID!
 """
 @inline function dGreensdn(xsource, xfield, n) # Normal derivative
-    dx, dy, dz = xsource[1]-xfield[1], xsource[2]-xfield[2], xsource[3]-xfield[3]
+    dx, dy, dz = xfield[1]-xsource[1], xfield[2]-xsource[2], xfield[3]-xsource[3]
     r = _distance(dx, dy, dz); 
     return  _Gn(r, (n[1]*dx + n[2]*dy + n[3]*dz)) 
 end
