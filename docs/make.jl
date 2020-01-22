@@ -1,4 +1,4 @@
-using Documenter, FinEtools, FinEtoolsVibInFluids
+using Documenter, FinEtools, FinEtoolsDeforLinear, FinEtoolsVibInFluids
 
 makedocs(
 	modules = [FinEtoolsVibInFluids],
