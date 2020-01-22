@@ -6,6 +6,12 @@ using FinEtoolsVibInFluids.LaplBEM
 using LinearAlgebra
 using Arpack
 
+# Free-vibration solution for a clamped plate partially or fully submerged in inviscid fluid.
+# 
+# Reference: Fu, Y., and Price, W. G., 1987, “Interactions Between a Partially 
+# or Totally Immersed Vibrating Cantilever Plate and the Surrounding Fluid,” 
+# J. Sound Vib., 118(3), pp. 495–513.
+
 E = 206000*phun("MPa");# Young's modulus
 nu = 0.3;# Poisson ratio
 rho = 7850*phun("KG*M^-3");# mass density
