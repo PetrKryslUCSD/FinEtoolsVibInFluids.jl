@@ -157,6 +157,15 @@ function _allelxs(xyz, conn)
     return elxs
 end
 
+"""
+    allelxs(xyz, conn)
+
+Construct array of all surface panel coordinates.
+"""
+function allelxs(xyz, conn)
+    return _allelxs(xyz, conn)
+end
+
 function _allnormals(elxs)
     normals = fill(Vector{Float64}(undef, 3), length(elxs))   
     cnormal = fill(0.0, 3)    
@@ -164,6 +173,15 @@ function _allnormals(elxs)
         normals[i] = deepcopy(triunitnml!(cnormal, elxs[i]))
     end
     return normals
+end
+
+"""
+    allnormals(elxs)
+
+Construct array of all surface panel normals.
+"""
+function allnormals(elxs)
+    return _allnormals(elxs)
 end
 
 function _doublelayer!(A, firstrowofset, rxyz, xyz, conn, elxs, solidangle, ir::TriRule) 
@@ -175,7 +193,7 @@ function _doublelayer!(A, firstrowofset, rxyz, xyz, conn, elxs, solidangle, ir::
     dummyfes = FESetT3(reshape(collect(econn), 1, 3))
     p, w = ir.param_coords, vec(ir.weights)
     Ns, gradNparams = _bfundata(dummyfes, ir)
-    f = (xsource, xfield, n) -> dGreensdn(xsource, xfield, n)
+    f = (xsource, xfield, n) -> (-1.0) * dGreensdn(xsource, xfield, n)
     cnormal = fill(0.0, 3) 
     xfield = fill(zero(FFlt), 1, 3); 
     J = fill(zero(FFlt), 3, 2); 
@@ -205,7 +223,7 @@ function _singlelayer!(B, firstrowofset, rxyz, xyz, conn, elxs, iroffdiagonal::T
     Nsoff, gradNparamsoff = _bfundata(dummyfes, iroffdiagonal)
     pdiagonal, wdiagonal = irdiagonal.param_coords, vec(irdiagonal.weights)
     Nsdiagonal, gradNparamsdiagonal = _bfundata(dummyfes, irdiagonal)
-    f = (xsource, xfield, n) -> Greens(xsource, xfield)
+    f = (xsource, xfield, n) -> (-1.0) * Greens(xsource, xfield)
     ex = fill(0.0, 3, 3) 
     xfield = fill(zero(FFlt), 1, 3); 
     J = fill(zero(FFlt), 3, 2); 
