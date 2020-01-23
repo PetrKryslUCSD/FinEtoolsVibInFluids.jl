@@ -14,7 +14,7 @@ using `FinEtools` to solve problems of free vibration in fluids.
 
 <img src="Fu_Price_mode5.png"
      alt="Fu, Price clamped plate, vibration mode 5"
-     style="width: 100; float: left; margin-right: 10px;" />
+     style="width: 100; float: left; margin-right: 10px;" />Fu, Price clamped plate, vibration mode 5, pressure field on the surface.
 
 ## News
 
