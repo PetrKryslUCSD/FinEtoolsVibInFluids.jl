@@ -9,5 +9,6 @@ module FinEtoolsVibInFluids
 __precompile__(false)
 
 include("LaplBEM.jl")
+include("AlgoVibInFluidsModule.jl")
 
 end # module

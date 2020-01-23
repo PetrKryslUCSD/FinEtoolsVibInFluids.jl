@@ -3,6 +3,7 @@ using FinEtools
 using FinEtoolsDeforLinear
 using FinEtoolsDeforLinear.AlgoDeforLinearModule
 using FinEtoolsVibInFluids.LaplBEM
+using FinEtoolsVibInFluids.AlgoVibInFluidsModule
 using LinearAlgebra
 using Arpack
 
@@ -168,7 +169,7 @@ function plate_completely_wet()
 
 	fens = model["fens"]
 	femm = model["femm"]
-	d = model["eigenvalues"]
+	d = model["eigenvalues"]  # squares of angular frequencies
 	v = model["eigenvectors"]
 	u = model["u"]
 	
@@ -240,6 +241,53 @@ function plate_completely_wet()
     true
 end # plate_completely_wet
 
+function plate_completely_wet_algo()
+	# Reference 7.35, 20.2, 50.45, 70.41, 78.85 [angular frequency, radians per second]
+	tolerance = Height/nHeight/1000;
+	
+	fens,fes  = T4block(Length, Width, Height, nLength, nWidth, nHeight)
+	
+	MR = DeforModelRed3D
+	material = MatDeforElastIso(MR, rho, E, nu, 0.0)
+	
+	femm = FEMMDeforLinearESNICET4(MR, IntegDomain(fes, NodalSimplexRule(3)), material)
+
+	nl1 = selectnode(fens, box=[0.0 0.0 -Inf Inf -Inf Inf], inflate=tolerance)
+	ebc1 = FDataDict("node_list"=>nl1, "component"=>1, "displacement"=>0.0)
+	ebc2 = FDataDict("node_list"=>nl1, "component"=>2, "displacement"=>0.0)
+	ebc3 = FDataDict("node_list"=>nl1, "component"=>3, "displacement"=>0.0)
+	
+	# Make the region
+	region1 = FDataDict("femm"=>femm, "femm_mass"=>femm)
+	
+	# Make model data
+	modeldata =  FDataDict("fens"=> fens, "regions"=>  [region1],
+		"essential_bcs"=>[ebc1 ebc2 ebc3], "omega_shift"=>0.0, "neigvs"=>neigvs)
+	
+	# Solve for the in-vacuo free vibration modes
+	modeldata = AlgoDeforLinearModule.modal(modeldata)
+	
+	println("Dry angular frequencies: $(modeldata["omega"]) [rad/s]")
+
+	# Determine the wet boundary faces
+	bfes = meshboundary(fes)
+	rl = vcat(selectelem(fens, bfes, box = [-Inf Inf -Inf Inf Height Height], inflate = tolerance),
+		selectelem(fens, bfes, box = [-Inf Inf -Inf Inf 0.0 0.0], inflate = tolerance));
+	# These are the wet surface panels
+	modeldata["wet_boundary_fes"] = subset(bfes, rl);
+	modeldata["rhow"] = rhow
+
+	# Solve for the wet-vibration modes
+	modeldata = AlgoVibInFluidsModule.modal(modeldata)
+
+	println("Wet angular frequencies: $(modeldata["wet_omega"]) [rad/s]")
+
+	modeldata = AlgoVibInFluidsModule.exportfluidpressuremode(modeldata)
+	modeldata["postprocessing"]["mode"] = 1:neigvs
+	modeldata = AlgoVibInFluidsModule.exportmode(modeldata)
+    true
+end # plate_completely_wet_algo
+
 function allrun()
     println("#####################################################")
     println("# plate_dry ")
@@ -247,6 +295,9 @@ function allrun()
     println("#####################################################")
     println("# plate_completely_wet ")
     plate_completely_wet()
+    println("#####################################################")
+    println("# plate_completely_wet_algo ")
+    plate_completely_wet_algo()
     return true
 end # function allrun
 
