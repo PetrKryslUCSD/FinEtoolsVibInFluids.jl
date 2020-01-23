@@ -12,6 +12,8 @@
 for basic operations on finite element meshes. `FinEtoolsVibInFluids` is a package
 using `FinEtools` to solve problems of free vibration in fluids.
 
+![Fu, Price clamp plate, vibration mode 5](Fu_Price_mode5.png)
+
 ## News
 
 - N/A.
