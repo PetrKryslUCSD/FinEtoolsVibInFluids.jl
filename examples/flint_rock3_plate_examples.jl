@@ -95,6 +95,7 @@ function flint_rock3_dry()
 
 	fens = model["fens"]
 	femm = model["femm"]
+	u = model["u"]
 	d = model["eigenvalues"]
 	v = model["eigenvectors"]
 
