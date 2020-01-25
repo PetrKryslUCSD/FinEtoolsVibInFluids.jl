@@ -41,9 +41,17 @@ function free_vibration_solver()
 	
 	Mshift =0;
 
-    MR = DeforModelRed3D
-    output = MeshImportModule.import_ABAQUS("./flint-rock3.inp")
-    fens, fes = output["fens"], output["fesets"][1]
+	println("Loading mesh")
+    @timeit to "Loading mesh" begin
+	    MR = DeforModelRed3D
+	    output = MeshImportModule.import_ABAQUS("./flint-rock3.inp")
+	    fens, fes = output["fens"], output["fesets"][1]
+	end
+
+    println("Number of nodes: $(count(fens))")
+    println("Interior mesh: $(count(fes)) tets")
+    println("Surface mesh: $(count(meshboundary(fes))) triangles")
+
     
     geom = NodalField(fens.xyz)
     u = NodalField(zeros(size(fens.xyz,1),3)) # displacement field
@@ -59,19 +67,23 @@ function free_vibration_solver()
 	    associategeometry!(femm,  geom)
 	end
 
+	println("Stiffness matrix")
     @timeit to "Stiffness matrix" begin
 	    K = stiffness(femm, geom, u)
 	end
-	@timeit to "Mass matrix" begin
+	println("Mass matrix")
+	   @timeit to "Mass matrix" begin
     	M = mass(femm, geom, u)
     end
 
-    @timeit to "Eigenvalue problem" begin
+    println("Eigenvalue problem")
+       @timeit to "Eigenvalue problem" begin
 	    d,v,nev,nconv = eigs(K+OmegaShift*M, M; nev=neigvs, which=:SM)
 	    d = d .- OmegaShift;
 	end
 
-    return Dict("fens"=>fens, "femm"=>femm, "geom"=>geom, "u"=>u, "eigenvectors"=>v, "eigenvalues"=>d, "timeroutput" =>to)
+    println("Done")
+       return Dict("fens"=>fens, "femm"=>femm, "geom"=>geom, "u"=>u, "eigenvectors"=>v, "eigenvalues"=>d, "timeroutput" =>to)
 end # plate_free_vibration_solver
 
 function flint_rock3_dry()
