@@ -6,6 +6,7 @@ using FinEtoolsDeforLinear.AlgoDeforLinearModule
 using FinEtoolsVibInFluids.LaplBEM
 using FinEtoolsVibInFluids.AlgoVibInFluidsModule
 using LinearAlgebra
+using TimerOutputs
 using Arpack
 
 # Free-vibration solution for a clamped plate partially or fully submerged in inviscid fluid.
@@ -36,8 +37,8 @@ function free_vibration_solver()
 	# J. Sound Vib., 118(3), pp. 495–513.
 	# Dry Natural frequencies [radians per second] (nLength=10,nWidth=10)
 	# 12.45153      29.44122      75.04792      94.26498      106.7881
-
-
+	to = TimerOutput()
+	
 	Mshift =0;
 
     MR = DeforModelRed3D
@@ -53,19 +54,32 @@ function free_vibration_solver()
 
     material = MatDeforElastIso(MR, rho, E, nu, 0.0)
 
-    femm = FEMMDeforLinearESNICET4(MR, IntegDomain(fes, NodalSimplexRule(3)), material)
-    associategeometry!(femm,  geom)
-    K = stiffness(femm, geom, u)
-    M = mass(femm, geom, u)
-    
-    d,v,nev,nconv = eigs(K+OmegaShift*M, M; nev=neigvs, which=:SM)
-    d = d .- OmegaShift;
+    @timeit to "Set up FE machine" begin
+	    femm = FEMMDeforLinearESNICET4(MR, IntegDomain(fes, NodalSimplexRule(3)), material)
+	    associategeometry!(femm,  geom)
+	end
 
-    return Dict("fens"=>fens, "femm"=>femm, "geom"=>geom, "u"=>u, "eigenvectors"=>v, "eigenvalues"=>d)
+    @timeit to "Stiffness matrix" begin
+	    K = stiffness(femm, geom, u)
+	end
+	@timeit to "Mass matrix" begin
+    	M = mass(femm, geom, u)
+    end
+
+    @timeit to "Eigenvalue problem" begin
+	    d,v,nev,nconv = eigs(K+OmegaShift*M, M; nev=neigvs, which=:SM)
+	    d = d .- OmegaShift;
+	end
+
+    return Dict("fens"=>fens, "femm"=>femm, "geom"=>geom, "u"=>u, "eigenvectors"=>v, "eigenvalues"=>d, "timeroutput" =>to)
 end # plate_free_vibration_solver
 
 function flint_rock3_dry()
+
+	
 	model = free_vibration_solver()
+
+	@show model["timeroutput"]
 
 	fens = model["fens"]
 	femm = model["femm"]
