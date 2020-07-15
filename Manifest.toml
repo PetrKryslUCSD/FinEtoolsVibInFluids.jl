@@ -89,11 +89,11 @@ version = "0.1.0"
 
 [[FinEtoolsVoxelMesher]]
 deps = ["FinEtools", "LinearAlgebra", "MappedArrays", "NIfTI", "Statistics", "Test"]
-git-tree-sha1 = "86bc4cde4a866d420396b7da0def1fba50cd11de"
+git-tree-sha1 = "d57dc120fc07e3b64a96849dd40f202fde7da8fd"
 repo-rev = "master"
 repo-url = "https://github.com/PetrKryslUCSD/FinEtoolsVoxelMesher.jl.git"
 uuid = "508a6b02-8bde-11e9-1a67-e1104bdc04c9"
-version = "0.1.0"
+version = "0.2.0"
 
 [[GZip]]
 deps = ["Libdl"]
