@@ -6,7 +6,7 @@ using FinEtoolsDeforLinear
 using FinEtoolsDeforLinear.AlgoDeforLinearModule
 using FinEtoolsVibInFluids.LaplBEM
 using FinEtoolsVibInFluids.AlgoVibInFluidsModule
-using FinEtoolsVoxelMesher.TetRemeshingModule
+using FinEtoolsVoxelMesher
 using LinearAlgebra
 using TimerOutputs
 using Arpack
@@ -279,29 +279,21 @@ function free_vibration_solver_w_remeshing()
 
     File = "Original.vtk"
     vtkexportmesh(File, fens, fes)
-    # @async run(`"paraview.exe" $File`)
-
+    
+    remesher = Remesher(fens.xyz, connasarray(fes), [1 for idx in 1:count(fes)], 0.0)
     for pass in 1:4
-    	nt = connasarray(fes)
-    	nv = deepcopy(fens.xyz)
-    	ntmid = [1 for idx in 1:size(nt, 1)] 
-    	nt, nv, ntmid = TetRemeshingModule.coarsen(nt, nv, ntmid; desired_ts = 1.25^(pass-1) * 0.001, surface_coarsening = false)
-    	nt, nv, ntmid = TetRemeshingModule.coarsen(nt, nv, ntmid; desired_ts = 1.25^(pass-1) * 0.001, surface_coarsening = true)
-    	
-    	fens.xyz = nv
-    	fes = fromarray!(fes, nt)
-    	setlabel!(fes, ntmid)
-    	# fens = meshsmoothing(fens, fes; method = :taubin, npass = 1)
-
-    	File = "Unref-$(pass).vtk"
-    	vtkexportmesh(File, fens, fes)
-    	# @async run(`"paraview.exe" $File`)
-
-    	println("After unrefinement: ")
-    	println("Number of nodes: $(count(fens))")
-    	println("Interior mesh: $(count(fes)) tets")
-    	println("Surface mesh: $(count(meshboundary(fes))) triangles")
-    end
+    	remesh!(remesher)
+    	t, v, tmid = meshdata(remesher)
+    	fens.xyz = v
+    	fes = fromarray!(fes, t)
+    	setlabel!(fes, tmid)
+         File = "Unref-$(pass).vtk"
+         vtkexportmesh(File, fens, fes)
+         println("After unrefinement: ")
+         println("Number of nodes: $(count(fens))")
+         println("Interior mesh: $(count(fes)) tets")
+         println("Surface mesh: $(count(meshboundary(fes))) triangles")
+     end
 
     fens, fes = T4refine(fens, fes)
 
@@ -446,6 +438,9 @@ function flint_rock3_wet_unrefine()
 end # flint_rock3_wet
 
 function allrun()
+    println("#####################################################")
+    println("# flint_rock3_wet_unrefine ")
+    flint_rock3_wet_unrefine()
     println("#####################################################")
     println("# flint_rock3_dry ")
     flint_rock3_dry()
