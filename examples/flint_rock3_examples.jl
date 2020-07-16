@@ -28,6 +28,18 @@ neigvs = 10;
 
 sigdig(n) = round(n * 1000) / 1000
 
+function volumeetc(fens, fes)
+	geom  =  NodalField(fens.xyz)
+	femm  =  FEMMBase(IntegDomain(fes, TetRule(1)))
+	V = integratefunction(femm, geom, (x) ->  1.0)
+	Sx = integratefunction(femm, geom, (x) ->  x[1])
+	Sy = integratefunction(femm, geom, (x) ->  x[2])
+	Sz = integratefunction(femm, geom, (x) ->  x[3])
+	centroid = [Sx, Sy, Sz] ./ V
+	return V, centroid
+end
+
+
 function free_vibration_solver()
 	# Free-vibration solution for a clamped plate 
 	# Reference: Fu, Y., and Price, W. G., 1987, “Interactions Between a Partially 
@@ -279,21 +291,31 @@ function free_vibration_solver_w_remeshing()
 
     File = "Original.vtk"
     vtkexportmesh(File, fens, fes)
+
+   	V0, centroid0 = volumeetc(fens, fes)
     
     remesher = Remesher(fens.xyz, connasarray(fes), [1 for idx in 1:count(fes)], 0.0)
-    for pass in 1:4
+    for pass in 1:9
     	remesh!(remesher)
     	t, v, tmid = meshdata(remesher)
     	fens.xyz = v
     	fes = fromarray!(fes, t)
     	setlabel!(fes, tmid)
-         File = "Unref-$(pass).vtk"
-         vtkexportmesh(File, fens, fes)
-         println("After unrefinement: ")
-         println("Number of nodes: $(count(fens))")
-         println("Interior mesh: $(count(fes)) tets")
-         println("Surface mesh: $(count(meshboundary(fes))) triangles")
-     end
+    	V, centroid = volumeetc(fens, fes)
+    	stretch = (V0 / V)^(1/3)
+    	for i in 1:size(fens.xyz, 1)
+    		for k in 1:size(fens.xyz, 2)
+    			fens.xyz[i, k] = (fens.xyz[i, k] - centroid[k]) * stretch + centroid[k]
+    		end
+    	end
+    	# @show V, centroid = volumeetc(fens, fes)
+    	File = "Unref-$(pass).vtk"
+    	vtkexportmesh(File, fens, fes)
+    	println("After unrefinement: ")
+    	println("Number of nodes: $(count(fens))")
+    	println("Interior mesh: $(count(fes)) tets")
+    	println("Surface mesh: $(count(meshboundary(fes))) triangles")
+    end
 
     fens, fes = T4refine(fens, fes)
 
