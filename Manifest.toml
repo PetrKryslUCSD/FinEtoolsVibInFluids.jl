@@ -1,9 +1,9 @@
 # This file is machine-generated - editing it directly is not advised
 
 [[ArgCheck]]
-git-tree-sha1 = "59c256cf71c3982484ae4486ee86a3d7da891dea"
+git-tree-sha1 = "dedbbb2ddb876f899585c4ec4433265e3017215a"
 uuid = "dce04be8-c92d-5529-be00-80e4d2c0e197"
-version = "2.0.0"
+version = "2.1.0"
 
 [[Arpack]]
 deps = ["Arpack_jll", "Libdl", "LinearAlgebra"]
@@ -75,13 +75,13 @@ version = "0.8.2"
 
 [[FinEtools]]
 deps = ["Arpack", "DelimitedFiles", "LinearAlgebra", "LoopVectorization", "Printf", "Random", "SparseArrays", "Statistics", "StatsBase", "Test", "Unicode"]
-path = "../FinEtools.jl"
+git-tree-sha1 = "7af31280fc800748f1ac6ee5e468ae71432c0151"
 uuid = "91bb5406-6c9a-523d-811d-0644c4229550"
-version = "4.1.0"
+version = "4.2.1"
 
 [[FinEtoolsDeforLinear]]
 deps = ["Arpack", "BenchmarkTools", "FinEtools", "LinearAlgebra", "Literate", "PGFPlotsX", "SparseArrays", "Statistics", "StatsBase", "Test"]
-git-tree-sha1 = "0c7f10a06da4e95f74e79cdbcf85e007adba3c5c"
+git-tree-sha1 = "f569103a97c3f4319aedfe616ef82f0448bcc935"
 repo-rev = "master"
 repo-url = "https://github.com/PetrKryslUCSD/FinEtoolsDeforLinear.jl.git"
 uuid = "e9187c00-8bdd-11e9-1e70-7ba8303116a2"
@@ -89,7 +89,7 @@ version = "0.1.0"
 
 [[FinEtoolsVoxelMesher]]
 deps = ["FinEtools", "LinearAlgebra", "MappedArrays", "NIfTI", "Statistics", "Test"]
-git-tree-sha1 = "d57dc120fc07e3b64a96849dd40f202fde7da8fd"
+git-tree-sha1 = "171ef51f6ad4e6a3e2871318b76fee184e83adb9"
 repo-rev = "master"
 repo-url = "https://github.com/PetrKryslUCSD/FinEtoolsVoxelMesher.jl.git"
 uuid = "508a6b02-8bde-11e9-1a67-e1104bdc04c9"
@@ -168,9 +168,9 @@ uuid = "a3a9e032-41b5-5fc4-967a-a6b7a19844d3"
 version = "0.4.1"
 
 [[OffsetArrays]]
-git-tree-sha1 = "4ba4cd84c88df8340da1c3e2d8dcb9d18dd1b53b"
+git-tree-sha1 = "2066e16af994955287f2e03ba1d9e890eb43b0dd"
 uuid = "6fe1bfb0-de20-5000-8ca7-80f57d26f881"
-version = "1.1.1"
+version = "1.1.2"
 
 [[OpenBLAS_jll]]
 deps = ["CompilerSupportLibraries_jll", "Libdl", "Pkg"]
