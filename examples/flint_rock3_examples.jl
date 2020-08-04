@@ -409,9 +409,9 @@ function free_vibration_solver_w_remeshing_ren(nunref = 6, nref = 2)
 
     numbering = let
     	C = connectionmatrix(FEMMBase(IntegDomain(fes, TetRule(1))), count(fens))
-    	@time ag = adjgraph(C)
-    	@time nd = nodedegrees(ag)
-    	@time numbering = revcm(ag, nd)
+    	ag = adjgraph(C)
+    	nd = nodedegrees(ag)
+    	numbering = revcm(ag, nd)
     end
 
     File = "Ref.vtk"
