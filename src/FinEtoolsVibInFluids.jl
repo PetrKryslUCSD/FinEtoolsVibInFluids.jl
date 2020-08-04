@@ -6,7 +6,7 @@ for continuum mechanics. Package for problems of vibration in fluids.
 """
 module FinEtoolsVibInFluids
 
-__precompile__(false)
+__precompile__(true)
 
 include("LaplBEM.jl")
 include("AlgoVibInFluidsModule.jl")
