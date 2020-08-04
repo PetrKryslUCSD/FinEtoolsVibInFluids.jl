@@ -267,13 +267,7 @@ function flint_rock3_wet_algo()
     true
 end # flint_rock3_wet_algo
 
-function free_vibration_solver_w_remeshing()
-	# Free-vibration solution for a clamped plate 
-	# Reference: Fu, Y., and Price, W. G., 1987, “Interactions Between a Partially 
-	# or Totally Immersed Vibrating Cantilever Plate and the Surrounding Fluid,” 
-	# J. Sound Vib., 118(3), pp. 495–513.
-	# Dry Natural frequencies [radians per second] (nLength=10,nWidth=10)
-	# 12.45153      29.44122      75.04792      94.26498      106.7881
+function free_vibration_solver_w_remeshing(nunref = 6, nref = 2)
 	to = TimerOutput()
 	
 	println("Loading mesh")
@@ -295,7 +289,7 @@ function free_vibration_solver_w_remeshing()
    	V0, centroid0 = volumeetc(fens, fes)
     
     remesher = Remesher(fens.xyz, connasarray(fes), [1 for idx in 1:count(fes)], 0.0)
-    for pass in 1:9
+    for pass in 1:nunref
     	remesh!(remesher)
     	t, v, tmid = meshdata(remesher)
     	fens.xyz = v
@@ -308,7 +302,6 @@ function free_vibration_solver_w_remeshing()
     			fens.xyz[i, k] = (fens.xyz[i, k] - centroid[k]) * stretch + centroid[k]
     		end
     	end
-    	# @show V, centroid = volumeetc(fens, fes)
     	File = "Unref-$(pass).vtk"
     	vtkexportmesh(File, fens, fes)
     	println("After unrefinement: ")
@@ -317,7 +310,9 @@ function free_vibration_solver_w_remeshing()
     	println("Surface mesh: $(count(meshboundary(fes))) triangles")
     end
 
-    fens, fes = T4refine(fens, fes)
+    for pass in 1:nref
+    	fens, fes = T4refine(fens, fes)
+    end
 
     File = "Ref.vtk"
     vtkexportmesh(File, fens, fes)
@@ -360,7 +355,107 @@ function free_vibration_solver_w_remeshing()
 	println("Done")
 
 	return Dict("fens"=>fens, "femm"=>femm, "geom"=>geom, "u"=>u, "eigenvectors"=>v, "eigenvalues"=>d, "timeroutput" =>to)
-end # free_vibration_solver
+end # free_vibration_solver_w_remeshing
+
+function free_vibration_solver_w_remeshing_ren(nunref = 6, nref = 2)
+	# As free_vibration_solver_w_remeshing, but with renumbering of the nodes to
+	# minimize the skyline (fill-in).
+	to = TimerOutput()
+	
+	println("Loading mesh")
+    @timeit to "Loading mesh" begin
+	    MR = DeforModelRed3D
+	    output = MeshImportModule.import_ABAQUS("./flint-rock3-1_5mm.inp")
+	    fens, fes = output["fens"], output["fesets"][1]
+	    fens.xyz .*= phun("MM")
+	end
+
+    println("Before unrefinement: ")
+    println("Number of nodes: $(count(fens))")
+    println("Interior mesh: $(count(fes)) tets")
+    println("Surface mesh: $(count(meshboundary(fes))) triangles")
+
+    File = "Original.vtk"
+    vtkexportmesh(File, fens, fes)
+
+   	V0, centroid0 = volumeetc(fens, fes)
+    
+    remesher = Remesher(fens.xyz, connasarray(fes), [1 for idx in 1:count(fes)], 0.0)
+    for pass in 1:nunref
+    	remesh!(remesher)
+    	t, v, tmid = meshdata(remesher)
+    	fens.xyz = v
+    	fes = fromarray!(fes, t)
+    	setlabel!(fes, tmid)
+    	V, centroid = volumeetc(fens, fes)
+    	stretch = (V0 / V)^(1/3)
+    	for i in 1:size(fens.xyz, 1)
+    		for k in 1:size(fens.xyz, 2)
+    			fens.xyz[i, k] = (fens.xyz[i, k] - centroid[k]) * stretch + centroid[k]
+    		end
+    	end
+    	# @show V, centroid = volumeetc(fens, fes)
+    	File = "Unref-$(pass).vtk"
+    	vtkexportmesh(File, fens, fes)
+    	println("After unrefinement: ")
+    	println("Number of nodes: $(count(fens))")
+    	println("Interior mesh: $(count(fes)) tets")
+    	println("Surface mesh: $(count(meshboundary(fes))) triangles")
+    end
+
+    for pass in 1:nref
+    	fens, fes = T4refine(fens, fes)
+    end
+
+    numbering = let
+    	C = connectionmatrix(FEMMBase(IntegDomain(fes, TetRule(1))), count(fens))
+    	@time ag = adjgraph(C)
+    	@time nd = nodedegrees(ag)
+    	@time numbering = revcm(ag, nd)
+    end
+
+    File = "Ref.vtk"
+    vtkexportmesh(File, fens, fes)
+    # @async run(`"paraview.exe" $File`)
+
+    println("After refinement: ")
+    println("Number of nodes: $(count(fens))")
+    println("Interior mesh: $(count(fes)) tets")
+    println("Surface mesh: $(count(meshboundary(fes))) triangles")
+
+    geom = NodalField(fens.xyz)
+    u = NodalField(zeros(size(fens.xyz,1),3)) # displacement field
+    # nl = selectnode(fens, box=[0.0 0.0 -Inf Inf -Inf Inf], inflate=tolerance)
+    # setebc!(u, nl, true, collect(1:3))
+    applyebc!(u)
+    numberdofs!(u, numbering)
+
+    material = MatDeforElastIso(MR, rho, E, nu, 0.0)
+
+    @timeit to "Set up FE machine" begin
+	    femm = FEMMDeforLinearESNICET4(MR, IntegDomain(fes, NodalSimplexRule(3)), material)
+	    associategeometry!(femm,  geom)
+	end
+
+	println("Stiffness matrix")
+    @timeit to "Stiffness matrix" begin
+	    K = stiffness(femm, geom, u)
+	end
+	println("Mass matrix")
+	@timeit to "Mass matrix" begin
+    	M = mass(femm, geom, u)
+    end
+
+    println("Eigenvalue problem")
+    @timeit to "Eigenvalue problem" begin
+	    d,v,nev,nconv = eigs(K+OmegaShift^2*M, M; nev=neigvs, which=:SM)
+	    d = d .- OmegaShift^2;
+	end
+
+	println("Done")
+
+	return Dict("fens"=>fens, "femm"=>femm, "geom"=>geom, "u"=>u, "eigenvectors"=>v, "eigenvalues"=>d, "timeroutput" =>to)
+end # free_vibration_solver_w_remeshing_ren
 
 function flint_rock3_wet_unrefine()
 	to = TimerOutput()
@@ -457,7 +552,7 @@ function flint_rock3_wet_unrefine()
 	println("Wet Natural frequencies: $(sigdig.(fs)) [Hz]")
 
 	true
-end # flint_rock3_wet
+end # flint_rock3_wet_unrefine
 
 function allrun()
     println("#####################################################")
