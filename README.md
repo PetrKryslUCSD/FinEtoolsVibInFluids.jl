@@ -1,10 +1,6 @@
 [![Project Status: Active – The project has reached a stable, usable state and is being actively developed.](http://www.repostatus.org/badges/latest/active.svg)](http://www.repostatus.org/#active)
 [![Build Status](https://travis-ci.com/PetrKryslUCSD/FinEtoolsVibInFluids.jl.svg?branch=master)](https://travis-ci.com/PetrKryslUCSD/FinEtoolsVibInFluids.jl)
-
-[![][docs-latest-img]][docs-latest-url]
-
-[docs-latest-img]: https://img.shields.io/badge/docs-latest-blue.svg
-[docs-latest-url]: http://petrkryslucsd.github.io/FinEtoolsVibInFluids.jl/latest/
+[![Latest documentation](https://img.shields.io/badge/docs-latest-blue.svg)](https://petrkryslucsd.github.io/FinEtoolsVibInFluids.jl/dev)
 
 # FinEtoolsVibInFluids: Vibration of elastic objects in fluids
 
@@ -18,7 +14,7 @@ using `FinEtools` to solve problems of free vibration in fluids.
 
 ## News
 
-- N/A.
+- 08/18/2020: Added tutorials.
 
 [Past news](oldnews.md)
 
