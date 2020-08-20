@@ -7,13 +7,23 @@ fluid. The plate is modeled with energy-stabilized NICE tetrahedra.
 
 For the dry plate, these are the natural frequencies:
 
-| Dry Natural frequencies [radians per second] (nLength=10,nWidth=10) |
-| ------------------------------------------------------------------- |
-| 12.45153   |   29.44122   |   75.04792   |   94.26498   |  106.7881 |
+| Mode | Dry frequencies [rad/s] |
+| ----- | ---------------------- |
+| 1 | 12.45   |
+| 2 | 29.44   |
+| 3 | 75.05   |
+| 4 | 94.27   |
+| 5 | 106.79 |
 
-| Wet Natural frequencies [radians per second] (nLength=10,nWidth=10) |
-| ------------------------------------------------------------------- |
-| 7.35 | 20.2 | 50.45 | 70.41 | 78.85 |
+For the immersed (wet) plate, these are the natural frequencies:
+
+| Mode | Wet frequencies [rad/s] |
+| ----- | ---------------------- |
+| 1 | 7.35   |
+| 2 | 20.2   |
+| 3 | 50.45   |
+| 4 | 70.41   |
+| 5 | 78.85 |
 
 ## References
 
