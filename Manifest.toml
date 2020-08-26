@@ -59,6 +59,8 @@ version = "0.8.2"
 [[FinEtools]]
 deps = ["Arpack", "DelimitedFiles", "LinearAlgebra", "LoopVectorization", "Printf", "Random", "SparseArrays", "Statistics", "StatsBase", "Test", "Unicode"]
 git-tree-sha1 = "6398eb3dd6435c45dd7da5ab5250188f4ad5b1d0"
+repo-rev = "master"
+repo-url = "https://github.com/PetrKryslUCSD/FinEtools.jl.git"
 uuid = "91bb5406-6c9a-523d-811d-0644c4229550"
 version = "4.7.0"
 
@@ -72,11 +74,11 @@ version = "0.3.0"
 
 [[FinEtoolsVoxelMesher]]
 deps = ["FinEtools", "LinearAlgebra", "MappedArrays", "NIfTI", "Statistics", "Test"]
-git-tree-sha1 = "3b1b8d9557c370895ecbc9a601ee029f03a64e8b"
+git-tree-sha1 = "b834ca10ae845bf92d782cde9e271265a469924b"
 repo-rev = "master"
 repo-url = "https://github.com/PetrKryslUCSD/FinEtoolsVoxelMesher.jl.git"
 uuid = "508a6b02-8bde-11e9-1a67-e1104bdc04c9"
-version = "0.2.0"
+version = "0.3.0"
 
 [[GZip]]
 deps = ["Libdl"]
@@ -125,9 +127,9 @@ uuid = "d6f4376e-aef5-505a-96c1-9c027394607a"
 
 [[Missings]]
 deps = ["DataAPI"]
-git-tree-sha1 = "de0a5ce9e5289f27df672ffabef4d1e5861247d5"
+git-tree-sha1 = "ed61674a0864832495ffe0a7e889c0da76b0f4c8"
 uuid = "e1d29d7a-bbdc-5cf2-9ac0-f12de2c33e28"
-version = "0.4.3"
+version = "0.4.4"
 
 [[Mmap]]
 uuid = "a63ad114-7e13-5084-954f-fe012c677804"
