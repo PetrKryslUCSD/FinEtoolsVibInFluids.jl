@@ -32,13 +32,14 @@ using FinEtools.MeshExportModule.VTK: vtkexportmesh
 Algorithm for exporting of the fluid pressure mode for visualization in Paraview.
 
 # Argument
-`modeldata` = dictionary with values for keys
+- `modeldata` = dictionary with values for keys
 
-* `"fens"`  = finite element node set
-* `"regions"`  = array of region dictionaries
-* `"geom"` = geometry field
-* `"u"` = displacement field
-* `"postprocessing"` = dictionary  with values for keys
+The meaning of the key-value pairs:
+- `"fens"`  = finite element node set
+- `"regions"`  = array of region dictionaries
+- `"geom"` = geometry field
+- `"u"` = displacement field
+- `"postprocessing"` = dictionary  with values for keys
   + `"boundary_only"` = should only the boundary of the  regions be rendered?
                       Default is render the interior.
   + `"file"` = name of the  postprocessing file
@@ -51,11 +52,11 @@ mandatory, the  region dictionary  contains values for keys:
 * `"femm"` = finite element mmodel machine (mandatory);
 
 # Output
-`modeldata` updated with
-* `modeldata["postprocessing"]["exported"]` = array of data dictionaries, one for
+- `modeldata` updated with
+  + `modeldata["postprocessing"]["exported"]` = array of data dictionaries, one for
         each exported file. The data is stored with the keys:
-    - `"file"` - name of exported file
-    - `"field"` - elemental field
+    * `"file"` - name of exported file
+    * `"field"` - elemental field
 """
 function exportfluidpressuremode(modeldata::FDataDict)
     modeldata_recognized_keys = ["fens", "regions", "geom", "u",
@@ -100,20 +101,20 @@ end
 Modal (free-vibration) analysis solver for solids partially or entirely submerged in fluid.
 
 # Argument
-`modeldata` = dictionary with values for keys 
+- `modeldata` = dictionary with values for keys 
 
-* those recognized by the `modal()` algorithm of AlgoDeforLinearModule, and
-* `"rhow"`  = mass density of the fluid medium
-* `"wet_boundary_fes"`  = finite element set for the wet boundary
+Those recognized by the `modal()` algorithm of AlgoDeforLinearModule, and
+- `"rhow"`  = mass density of the fluid medium
+- `"wet_boundary_fes"`  = finite element set for the wet boundary
 
 # Output
 `modeldata`= the dictionary on input is augmented with
-* `"geom"` = the nodal field that is the geometry
-* `"u"` = the nodal field that is the computed displacement
-* `"neigvs"` = Number of computed eigenvectors
-* `"W"` = Computed eigenvectors, neigvs columns
-* `"omega"` =  Computed angular frequencies, array of length neigvs
-* `"raw_eigenvalues"` = Raw computed eigenvalues
+- `"geom"` = the nodal field that is the geometry
+- `"u"` = the nodal field that is the computed displacement
+- `"neigvs"` = Number of computed eigenvectors
+- `"W"` = Computed eigenvectors, neigvs columns
+- `"omega"` =  Computed angular frequencies, array of length neigvs
+- `"raw_eigenvalues"` = Raw computed eigenvalues
 """
 function modal(modeldata::FDataDict)
 
@@ -208,15 +209,16 @@ end
 Algorithm for exporting of the mode shape for visualization in Paraview.
 
 # Argument
-`modeldata` = dictionary with values for keys
+- `modeldata` = dictionary with values for keys
 
-* `"fens"`  = finite element node set
-* `"regions"`  = array of region dictionaries
-* `"geom"` = geometry field
-* `"u"` = displacement field
-* `"wet_W"` = Computed wet free-vibration eigenvectors, `neigvs` columns
-* `"wet_omega"` =  Computed free-vibration angular frequencies, array of length `neigvs`
-* `"postprocessing"` = dictionary  with values for keys
+The meaning of the key-value pairs:
+- `"fens"`  = finite element node set
+- `"regions"`  = array of region dictionaries
+- `"geom"` = geometry field
+- `"u"` = displacement field
+- `"wet_W"` = Computed wet free-vibration eigenvectors, `neigvs` columns
+- `"wet_omega"` =  Computed free-vibration angular frequencies, array of length `neigvs`
+- `"postprocessing"` = dictionary  with values for keys
   + `"boundary_only"` = should only the boundary of the  regions be rendered?
                       Default is render the interior.
   + `"file"` = name of the  postprocessing file
@@ -229,8 +231,8 @@ mandatory, the  region dictionary  contains values for keys:
 * `"femm"` = finite element mmodel machine (mandatory);
 
 # Output
-`modeldata` updated with
-* `modeldata["postprocessing"]["exported"]` = see `exportdeformation()`
+- `modeldata` updated with
+  + `modeldata["postprocessing"]["exported"]` = see `exportdeformation()`
 """
 function exportmode(modeldata::FDataDict)
     modeldata_recognized_keys = ["fens", "regions", "geom", "u",
