@@ -1,7 +1,7 @@
 name = "FinEtoolsVibInFluids"
 uuid = "bec31ec3-4858-4ad8-9f9e-aabdaa4a593b"
 authors = ["Petr Krysl <pkrysl@ucsd.edu>"]
-version = "0.3.1"
+version = "0.4.0"
 
 [deps]
 Arpack = "7d9fca2a-8960-54d3-9f78-7d1dccf2cb97"
@@ -20,4 +20,4 @@ FinEtools = "^4.7"
 FinEtoolsDeforLinear = "^0.3"
 FinEtoolsVoxelMesher = "^0.4"
 JSON = "^0.21"
-julia = "^1.5"
+julia = "~1.5"
