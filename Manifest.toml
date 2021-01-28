@@ -87,15 +87,15 @@ version = "4.8.3"
 
 [[FinEtoolsDeforLinear]]
 deps = ["Arpack", "FinEtools", "LinearAlgebra", "SparseArrays", "Statistics", "StatsBase", "SymRCM", "Test"]
-git-tree-sha1 = "ed6b58c9bf3cb1a9b37af6e2f92e7a9b2925732f"
+git-tree-sha1 = "aae7a75ae093ae96d6288b74bd68114eff036704"
 uuid = "e9187c00-8bdd-11e9-1e70-7ba8303116a2"
-version = "0.4.0"
+version = "0.4.1"
 
 [[FinEtoolsVoxelMesher]]
 deps = ["FinEtools", "LinearAlgebra", "MappedArrays", "NIfTI", "Statistics", "Test", "UnicodePlots"]
-git-tree-sha1 = "caff360cd722efbfcfc581113ba7b9f37c1be68a"
+git-tree-sha1 = "3b39c169ed8bc1e0ede7d51d3be8872adad982f4"
 uuid = "508a6b02-8bde-11e9-1a67-e1104bdc04c9"
-version = "0.4.2"
+version = "0.4.3"
 
 [[GZip]]
 deps = ["Libdl"]
