@@ -1,4 +1,5 @@
 module mvib1
+#using DelimitedFiles
 using FinEtools
 using FinEtoolsDeforLinear
 using FinEtoolsDeforLinear.AlgoDeforLinearModule
@@ -50,8 +51,22 @@ function plate_free_vibration_solver()
     K = stiffness(femm, geom, u)
     M = mass(femm, geom, u)
     
-    d,v,nev,nconv = eigs(K+OmegaShift*M, M; nev=neigvs, which=:SM)
+    d, v, nconv = eigs(Symmetric(K+OmegaShift*M), Symmetric(M); nev=neigvs, which=:SM,  explicittransform=:none)
     d = d .- OmegaShift;
+    d = real.(d)
+    v = real.(v)
+    #for i in 1:length(d)
+    #    @show v[:, i]' * K * v[:, i]
+    #end
+    #for i in 1:length(d)
+    #    @show v[:, i]' * M * v[:, i]
+    #end
+    #open("d.txt", "w") do io
+    #        writedlm(io, d)
+    #    end
+    #    open("v.txt", "w") do io
+    #        writedlm(io, v)
+    #    end
 
     return Dict("fens"=>fens, "femm"=>femm, "geom"=>geom, "u"=>u, "eigenvectors"=>v, "eigenvalues"=>d)
 end # plate_free_vibration_solver
@@ -108,6 +123,15 @@ function plate_completely_wet()
 	A = LaplBEM.doublelayer!(A, fens.xyz, connasarray(wbfes), TriRule(3)) 
 	B = fill(0.0, count(wbfes), count(wbfes))
 	B = LaplBEM.singlelayer!(B, fens.xyz, connasarray(wbfes), TriRule(3), TriRule(3)) 
+    #open("A.txt", "w") do io
+    #    writedlm(io, A)
+    #end
+    #open("B.txt", "w") do io
+    #    writedlm(io, B)
+    #end
+    #open("vn.txt", "w") do io
+    #    writedlm(io, vn)
+    #end
 	pp = A \ (B * vn) 
 
 	areas = fill(0.0, count(wbfes))
@@ -128,6 +152,7 @@ function plate_completely_wet()
 	end
 	raM = (raM +raM')/2;# it should be symmetric, but make sure
 
+    #@show rK, rM, raM
 	decomp = eigen(rK, rM+raM)
 	wv = v*decomp.vectors;
 	return sqrt.(decomp.values)
