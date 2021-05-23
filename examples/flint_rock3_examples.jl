@@ -87,7 +87,7 @@ function free_vibration_solver()
 
     println("Eigenvalue problem")
     @timeit to "Eigenvalue problem" begin
-	    d,v,nev,nconv = eigs(K+OmegaShift^2*M, M; nev=neigvs, which=:SM)
+	    d,v,nev,nconv = eigs(K+OmegaShift^2*M, M; nev=neigvs, which=:SM,  explicittransform=:none)
 	    d = d .- OmegaShift^2;
 	end
 
@@ -348,7 +348,7 @@ function free_vibration_solver_w_remeshing(nunref = 6, nref = 2)
 
     println("Eigenvalue problem")
     @timeit to "Eigenvalue problem" begin
-	    d,v,nev,nconv = eigs(K+OmegaShift^2*M, M; nev=neigvs, which=:SM)
+	    d,v,nev,nconv = eigs(K+OmegaShift^2*M, M; nev=neigvs, which=:SM,  explicittransform=:none)
 	    d = d .- OmegaShift^2;
 	end
 

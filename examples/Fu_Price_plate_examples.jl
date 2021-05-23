@@ -56,7 +56,7 @@ function plate_free_vibration_solver()
     K = stiffness(femm, geom, u)
     M = mass(femm, geom, u)
     
-    d,v,nev,nconv = eigs(K+OmegaShift*M, M; nev=neigvs, which=:SM)
+    d,v,nev,nconv = eigs(K+OmegaShift*M, M; nev=neigvs, which=:SM,  explicittransform=:none)
     d = d .- OmegaShift;
 
     return Dict("fens"=>fens, "femm"=>femm, "geom"=>geom, "u"=>u, "eigenvectors"=>v, "eigenvalues"=>d)
