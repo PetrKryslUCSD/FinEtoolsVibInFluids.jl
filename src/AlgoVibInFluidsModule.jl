@@ -16,9 +16,8 @@ using FinEtools.NodalFieldModule: NodalField, nnodes
 using FinEtools.FESetModule: nodesperelem, connasarray
 using FinEtools.IntegRuleModule: TriRule
 using FinEtools.FEMMBaseModule: associategeometry!, distribloads, fieldfromintegpoints, elemfieldfromintegpoints
-using FinEtoolsDeforLinear.FEMMDeforLinearBaseModule: stiffness, mass, nzebcloadsstiffness, thermalstrainloads, inspectintegpoints
-using FinEtoolsDeforLinear.FEMMDeforLinearMSModule: stiffness, mass, nzebcloadsstiffness, thermalstrainloads, inspectintegpoints
-using FinEtoolsDeforLinear.DeforModelRedModule: stresscomponentmap
+using FinEtoolsDeforLinear.FEMMDeforLinearBaseModule: stiffness, mass, thermalstrainloads, inspectintegpoints
+using FinEtoolsDeforLinear.FEMMDeforLinearMSModule: stiffness, mass, thermalstrainloads, inspectintegpoints
 using FinEtoolsDeforLinear.AlgoDeforLinearModule
 using FinEtoolsVibInFluids.LaplBEM
 using FinEtools.ForceIntensityModule: ForceIntensity
