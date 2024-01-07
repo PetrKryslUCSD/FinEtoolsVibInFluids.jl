@@ -1,9 +1,5 @@
 # FinEtoolsVibInFluids Documentation
 
-## Tutorials
-
-The [tutorials](tutorials/tutorials.md) are provided in the form of Julia scripts and Markdown files. 
-
 ## Manual
 
 The description of the types and the functions, organized by module and/or other logical principle.
