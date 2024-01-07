@@ -7,7 +7,7 @@ using FinEtools.IntegRuleModule: TriRule, GaussRule
 import FinEtools.MatrixUtilityModule: locjac!
 using Base.Threads
 
-@inline function _distance(dx, dy, dz)::Float64
+@inline function _distance(dx, dy, dz)
     return sqrt(dx^2 + dy^2 + dz^2)
 end
 
@@ -123,8 +123,9 @@ function surfnml!(n, J)
 end
 
 function _bfundata(fes, ir)
-    Ns = FFltMat[];
-    gradNparams = FFltMat[];
+    T = eltype(ir.param_coords)
+    Ns = Matrix{T}[];
+    gradNparams = Matrix{T}[];
     for j in 1:ir.npts
         push!(Ns, bfun(fes,vec(ir.param_coords[j,:])));
         push!(gradNparams, bfundpar(fes,vec(ir.param_coords[j,:])));
@@ -132,14 +133,11 @@ function _bfundata(fes, ir)
     return Ns, gradNparams
 end
 
-"""
-    _eint(f::T, econn, ex, xsource, n, p, w, Ns, gradNparams, xfield, J, nfield)::Complex{Float64} where {T}
 
-Compute the element integral.
-We go to a lot of trouble here to eliminate all sources of allocations. This function is called
-for each entry of the Helmholtz matrices.
-"""
-function _eint(f::T, econn, ex, xsource, n, p, w, Ns, gradNparams, xfield, J, nfield)::Complex{Float64} where {T}
+# Compute the element integral.
+# We go to a lot of trouble here to eliminate all sources of allocations. This function is called
+# for each entry of the Helmholtz matrices.
+function _eint(f::F, econn, ex, xsource, n, p, w, Ns, gradNparams, xfield, J, nfield) where {F}
     result = 0.0  + 0.0im
     for j in 1:length(w)
         locjac!(xfield, J, ex, Ns[j], gradNparams[j])
@@ -150,7 +148,7 @@ function _eint(f::T, econn, ex, xsource, n, p, w, Ns, gradNparams, xfield, J, nf
 end
 
 function _allelxs(xyz, conn)
-    elxs = fill(Matrix{Float64}(undef, size(conn, 2), 3), size(conn, 1))   
+    elxs = fill(Matrix{eltype(xyz)}(undef, size(conn, 2), 3), size(conn, 1))
     for i in 1:size(conn, 1)
         elxs[i] = xyz[view(conn, i, :), :]
     end
@@ -167,7 +165,7 @@ function allelxs(xyz, conn)
 end
 
 function _allnormals(elxs)
-    normals = fill(Vector{Float64}(undef, 3), length(elxs))   
+    normals = fill(Vector{eltype(elxs[1])}(undef, 3), length(elxs))
     cnormal = fill(0.0, 3)    
     for i in 1:length(elxs)
         normals[i] = deepcopy(triunitnml!(cnormal, elxs[i]))
@@ -184,7 +182,8 @@ function allnormals(elxs)
     return _allnormals(elxs)
 end
 
-function _doublelayer!(A, firstrowofset, rxyz, xyz, conn, elxs, solidangle, ir::TriRule) 
+function _doublelayer!(A, firstrowofset, rxyz, xyz, conn, elxs, solidangle, ir::IR)  where {IR<:TriRule}
+    T = eltype(xyz)
 	nrows = size(rxyz, 1)
     neqn = size(conn, 1)
     @assert size(A, 1) == nrows "Size of matrix needs to match number of row points"
@@ -195,9 +194,9 @@ function _doublelayer!(A, firstrowofset, rxyz, xyz, conn, elxs, solidangle, ir::
     Ns, gradNparams = _bfundata(dummyfes, ir)
     f = (xsource, xfield, n) -> (-1.0) * dGreensdn(xsource, xfield, n)
     cnormal = fill(0.0, 3) 
-    xfield = fill(zero(FFlt), 1, 3); 
-    J = fill(zero(FFlt), 3, 2); 
-    nfield = fill(zero(FFlt), 1, 3); 
+    xfield = fill(zero(T), 1, 3);
+    J = fill(zero(T), 3, 2);
+    nfield = fill(zero(T), 1, 3);
     normals = _allnormals(elxs)
     for r in 1:nrows
         rx = view(rxyz, r, :)
@@ -212,7 +211,8 @@ function _doublelayer!(A, firstrowofset, rxyz, xyz, conn, elxs, solidangle, ir::
     return A
 end
 
-function _singlelayer!(B, firstrowofset, rxyz, xyz, conn, elxs, iroffdiagonal::TriRule, irdiagonal::TriRule) 
+function _singlelayer!(B, firstrowofset, rxyz, xyz, conn, elxs, iroffdiagonal::IR, irdiagonal::IR) where {IR<:TriRule}
+    T = eltype(xyz)
 	nrows = size(rxyz, 1)
     neqn = size(conn, 1)
     @assert size(B, 1) == nrows "Size of matrix needs to match number of row points"
@@ -225,9 +225,9 @@ function _singlelayer!(B, firstrowofset, rxyz, xyz, conn, elxs, iroffdiagonal::T
     Nsdiagonal, gradNparamsdiagonal = _bfundata(dummyfes, irdiagonal)
     f = (xsource, xfield, n) -> (-1.0) * Greens(xsource, xfield)
     ex = fill(0.0, 3, 3) 
-    xfield = fill(zero(FFlt), 1, 3); 
-    J = fill(zero(FFlt), 3, 2); 
-    nfield = fill(zero(FFlt), 1, 3); 
+    xfield = fill(zero(T), 1, 3);
+    J = fill(zero(T), 3, 2);
+    nfield = fill(zero(T), 1, 3);
     normals = _allnormals(elxs)
     ccentroid = fill(0.0, 3) 
     for r in 1:nrows 
@@ -250,7 +250,7 @@ function _singlelayer!(B, firstrowofset, rxyz, xyz, conn, elxs, iroffdiagonal::T
 end
 
 """
-    doublelayer!(A, xyz, conn, ir::TriRule) 
+    doublelayer!(A, xyz, conn, ir::IR)  where {IR<:TriRule}
 
 Compute the double-layer matrix contribution. 
 
@@ -262,7 +262,7 @@ Arguments
 
 The contribution is _added_to the matrix `A`. This matrix is also returned for convenience.
 """
-function doublelayer!(A, xyz, conn, ir::TriRule) 
+function doublelayer!(A, xyz, conn, ir::IR)  where {IR<:TriRule}
 	neqn = size(conn, 1)
     rxyz = fill(0.0, neqn, 3) 
     rcentroid = fill(0.0, 3) 
@@ -275,7 +275,7 @@ end
 
 
 """
-    singlelayer!(B, k, xyz, conn, iroffdiagonal::TriRule, irdiagonal::TriRule) 
+    singlelayer!(B, xyz, conn, iroffdiagonal::IR, irdiagonal::IR)  where {IR<:TriRule}
 
 Compute the single-layer matrix contribution. 
 
@@ -288,7 +288,7 @@ Arguments
 
 The contribution is _added_to the matrix `B`. This matrix is also returned for convenience.
 """
-function singlelayer!(B, xyz, conn, iroffdiagonal::TriRule, irdiagonal::TriRule) 
+function singlelayer!(B, xyz, conn, iroffdiagonal::IR, irdiagonal::IR)  where {IR<:TriRule}
 	neqn = size(conn, 1)
     rxyz = fill(0.0, neqn, 3) 
     rcentroid = fill(0.0, 3) 
