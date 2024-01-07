@@ -11,7 +11,7 @@ using Arpack: eigs
 using SparseArrays: spzeros
 using LinearAlgebra: mul!, eigen, qr, dot, cholesky, norm, diagm, I
 my_A_mul_B!(C, A, B) = mul!(C, A, B)
-using FinEtools.FieldModule: AbstractField, ndofs, setebc!, numberdofs!, applyebc!, scattersysvec!
+using FinEtools.FieldModule: AbstractField, ndofs, setebc!, numberdofs!, applyebc!, scattersysvec!, nfreedofs
 using FinEtools.NodalFieldModule: NodalField, nnodes
 using FinEtools.FESetModule: nodesperelem, connasarray
 using FinEtools.IntegRuleModule: TriRule
