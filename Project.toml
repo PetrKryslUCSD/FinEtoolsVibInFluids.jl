@@ -16,5 +16,11 @@ Test = "8dfed614-e22c-5e08-85e1-65c5234f0b40"
 
 [compat]
 Arpack = "=0.5.3"
-FinEtools = "^7.3"
+DelimitedFiles = "1.9.1"
+FinEtools = "7.3.0"
+FinEtoolsDeforLinear = "2.1.1"
+FinEtoolsVoxelMesher = "2.0.1"
+LinearAlgebra = "1.10.0"
+SparseArrays = "1.10.0"
+Statistics = "1.10.0"
 julia = "^1.10"
