@@ -2,6 +2,7 @@
 Arpack = "7d9fca2a-8960-54d3-9f78-7d1dccf2cb97"
 FinEtools = "91bb5406-6c9a-523d-811d-0644c4229550"
 FinEtoolsDeforLinear = "e9187c00-8bdd-11e9-1e70-7ba8303116a2"
+FinEtoolsVibInFluids = "bec31ec3-4858-4ad8-9f9e-aabdaa4a593b"
 
 [compat]
 Arpack = "=0.5.3"
