@@ -51,10 +51,12 @@ function plate_free_vibration_solver()
 
     material = MatDeforElastIso(MR, rho, E, nu, 0.0)
 
+    massem = SysmatAssemblerFFBlock(nfreedofs(u))
+
     femm = FEMMDeforLinearESNICET4(MR, IntegDomain(fes, NodalSimplexRule(3)), material)
     associategeometry!(femm,  geom)
-    K = stiffness(femm, geom, u)
-    M = mass(femm, geom, u)
+    K = stiffness(femm, massem, geom, u)
+    M = mass(femm, massem, geom, u)
     
     d,v,nev,nconv = eigs(K+OmegaShift*M, M; nev=neigvs, which=:SM,  explicittransform=:none)
     d = d .- OmegaShift;
