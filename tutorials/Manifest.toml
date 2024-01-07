@@ -315,9 +315,9 @@ version = "2.1.1"
 
 [[deps.FinEtoolsVibInFluids]]
 deps = ["Arpack", "DelimitedFiles", "FinEtools", "FinEtoolsDeforLinear", "FinEtoolsVoxelMesher", "LinearAlgebra", "SparseArrays", "Statistics", "Test"]
-git-tree-sha1 = "6af08a9970e943b9244b6f31ae40da24cf8b2b47"
+git-tree-sha1 = "73fc2e5817a779af24ed2860cb57641591136a2b"
 uuid = "bec31ec3-4858-4ad8-9f9e-aabdaa4a593b"
-version = "1.1.0"
+version = "1.1.1"
 
 [[deps.FinEtoolsVoxelMesher]]
 deps = ["FinEtools", "Images", "LinearAlgebra", "MappedArrays", "NIfTI", "Random", "Statistics", "Test"]
