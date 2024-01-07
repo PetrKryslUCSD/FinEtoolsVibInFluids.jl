@@ -14,52 +14,40 @@ using `FinEtools` to solve problems of free vibration in fluids.
 
 ## News
 
-- 01/07/2023: Updated for FinEtools 7.3.0.
+- 01/07/2023: Updated for FinEtools 7.3.0. Moved tutorials into the package tree.
 
 [Past news](oldnews.md)
 
-## How to test the package
+## Tutorials
 
-Here is a record of a session to install this package and test it. You should
-see something similar. The git bash running on Windows 10 was used in this
-example.
+There are tutorials explaining the use of this package.
+Check out the [index](https://github.com/PetrKryslUCSD/FinEtoolsVibInFluids.jl/blob/main/tutorials/index.md). The  tutorials themselves can be executed as
+follows:
 
-Clone the repo:
+- Download the package or clone it.
 ```
-PetrKrysl@Spectre MINGW64 /tmp/exp
-$ git clone https://github.com/PetrKryslUCSD/FinEtoolsVibInFluids.jl.git
-Cloning into 'FinEtoolsVibInFluids.jl'...
-...
+git clone https://github.com/PetrKryslUCSD/FinEtoolsVibInFluids.jl.git
 ```
-Change your working directory, and run Julia:
+- Change into the `tutorials` folder: `cd .\FinEtoolsVibInFluids.jl\tutorials`.
+- Start Julia: `julia`.
+- Activate the environment:
 ```
-$ cd FinEtoolsVibInFluids.jl/
-
-PetrKrysl@Spectre MINGW64 /tmp/exp/FinEtoolsVibInFluids.jl (master)
-$ ~/AppData/Local/Programs/Julia/Julia-1.5.0-DEV/bin/julia.exe
+using Pkg; Pkg.activate("."); Pkg.instantiate();
 ```
-Activate and instantiate the environment:
+- Execute the desired tutorial. Here `name.jl` is the name of the tutorial file:
 ```
-julia> using Pkg; Pkg.activate("."); Pkg.instantiate()   
-Activating environment at `C:\Users\PKrysl\Documents\work\FinEtoolsVibInFluids\Project.toml`     
-```
-Test the package:
-```
-(FinEtoolsVibInFluids) pkg> test
-Test Summary:       | Pass  Total     
-Vibration in fluids |    1      1     
- 43.373997 seconds (66.45 M allocations: 3.625 GiB, 5.14% gc time)    
-   Testing FinEtoolsVibInFluids tests passed    
+include("name.jl")
 ```
 
 ## Examples
 
-Activate and instantiate the environment:
+Begin with changing your working directory to the `examples` folder. Activate
+and instantiate the examples environment.
 ```
 using Pkg
-Pkg.activate("."); Pkg.instantiate()
+Pkg.activate(".")
+Pkg.instantiate()
 ```
-
-There are a number of examples, which may
+There are a number of examples. The examples may
 be executed as described in the  [conceptual guide to
 `FinEtools`](https://petrkryslucsd.github.io/FinEtools.jl/latest).
