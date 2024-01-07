@@ -46,10 +46,12 @@ function plate_free_vibration_solver()
 
     material = MatDeforElastIso(MR, rho, E, nu, 0.0)
 
+    massem = SysmatAssemblerFFBlock(nfreedofs(u))
+
     femm = FEMMDeforLinearESNICET4(MR, IntegDomain(fes, NodalSimplexRule(3)), material)
     associategeometry!(femm,  geom)
-    K = stiffness(femm, geom, u)
-    M = mass(femm, geom, u)
+    K = stiffness(femm, massem, geom, u)
+    M = mass(femm, massem, geom, u)
     
     d, v, nconv = eigs(Symmetric(K+OmegaShift*M), Symmetric(M); nev=neigvs, which=:SM,  explicittransform=:none)
     d = d .- OmegaShift;
@@ -103,7 +105,7 @@ function plate_completely_wet()
 			for k in wbfes.conn[i]
 				for m in 1:3
 					dof = u.dofnums[k, m]
-					uk[m] = (dof != 0 ? v[dof, mode] : 0.0)
+					uk[m] = (dof != 0 && dof <= nfreedofs(u) ? v[dof, mode] : 0.0)
 				end
 				vn[i, mode] += dot(pnormals[i], uk)
 			end
@@ -155,7 +157,7 @@ function plate_completely_wet()
     #@show rK, rM, raM
 	decomp = eigen(rK, rM+raM)
 	wv = v*decomp.vectors;
-	return sqrt.(decomp.values)
+	return sqrt.(abs.(decomp.values))
 end # plate_completely_wet
 
 function test()
