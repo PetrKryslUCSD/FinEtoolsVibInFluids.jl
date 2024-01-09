@@ -5,6 +5,7 @@ using FinEtoolsDeforLinear
 using FinEtoolsDeforLinear.AlgoDeforLinearModule
 using FinEtoolsVibInFluids.LaplBEM
 using LinearAlgebra
+using DelimitedFiles
 using Arpack
 using Test
 
@@ -57,6 +58,10 @@ function plate_free_vibration_solver()
     d = d .- OmegaShift;
     d = real.(d)
     v = real.(v)
+    ix = sortperm(d)
+    d = d[ix]
+    v = v[:, ix]
+
     #for i in 1:length(d)
     #    @show v[:, i]' * K * v[:, i]
     #end
@@ -66,9 +71,14 @@ function plate_free_vibration_solver()
     #open("d.txt", "w") do io
     #        writedlm(io, d)
     #    end
-    #    open("v.txt", "w") do io
-    #        writedlm(io, v)
-    #    end
+
+       File = "test.vtk"
+       vectors = []
+       for mode in 1:neigvs
+         scattersysvec!(u, v[:, mode])
+         push!(vectors, ("mode$mode", deepcopy(u.values)))
+     end
+       vtkexportmesh(File, fens, fes; vectors = vectors)
 
     return Dict("fens"=>fens, "femm"=>femm, "geom"=>geom, "u"=>u, "eigenvectors"=>v, "eigenvalues"=>d)
 end # plate_free_vibration_solver
@@ -83,7 +93,7 @@ function plate_completely_wet()
 	d = model["eigenvalues"]
 	v = model["eigenvectors"]
 	u = model["u"]
-	
+
 	neigvs = size(v, 2)
 
 	fes = femm.integdomain.fes
@@ -112,6 +122,7 @@ function plate_completely_wet()
 			vn[i, mode] /= nnperel
 		end
 	end
+    @show size(vn)
 	
 	# scalars = []
 	# for mode in 1:neigvs
@@ -153,6 +164,8 @@ function plate_completely_wet()
 	    end
 	end
 	raM = (raM +raM')/2;# it should be symmetric, but make sure
+    @show rK
+    @show raM
 
     #@show rK, rM, raM
 	decomp = eigen(rK, rM+raM)
@@ -161,7 +174,7 @@ function plate_completely_wet()
 end # plate_completely_wet
 
 function test()
-	angular_frequencies = plate_completely_wet()
+	@show angular_frequencies = plate_completely_wet()
 	@test norm(angular_frequencies - [8.64673912672756, 22.463163136168948, 54.24478379306806, 72.16460600046824, 81.89085075349693]) <= 1.0e-5
 	true
 end
