@@ -69,7 +69,8 @@ function plate_dry()
 
 	fens = model["fens"]
 	femm = model["femm"]
-	d = model["eigenvalues"]
+	u = model["u"]
+    d = model["eigenvalues"]
 	v = model["eigenvectors"]
 
 	fs = real(sqrt.(complex(d)))/(2*pi)
@@ -117,7 +118,7 @@ function plate_one_quarter_wet()
 			for k in wbfes.conn[i]
 				for m in 1:3
 					dof = u.dofnums[k, m]
-					uk[m] = (dof != 0 ? v[dof, mode] : 0.0)
+                    uk[m] = (1 <= dof <= nfreedofs(u) ? v[dof, mode] : 0.0)
 				end
 				vn[i, mode] += dot(pnormals[i], uk)
 			end
@@ -159,7 +160,6 @@ function plate_one_quarter_wet()
 
 	decomp = eigen(rK, rM+raM)
 	wv = v*decomp.vectors;
-	@show sqrt.(decomp.values)
 
     true
 end # plate_wet
@@ -196,7 +196,7 @@ function plate_completely_wet()
 			for k in wbfes.conn[i]
 				for m in 1:3
 					dof = u.dofnums[k, m]
-					uk[m] = (dof != 0 ? v[dof, mode] : 0.0)
+					uk[m] = (1 <= dof <= nfreedofs(u) ? v[dof, mode] : 0.0)
 				end
 				vn[i, mode] += dot(pnormals[i], uk)
 			end
@@ -238,7 +238,6 @@ function plate_completely_wet()
 
 	decomp = eigen(rK, rM+raM)
 	wv = v*decomp.vectors;
-	@show sqrt.(decomp.values)
 
     true
 end # plate_completely_wet
@@ -303,4 +302,8 @@ function allrun()
     return true
 end # function allrun
 
+@info "All examples may be executed with "
+println("using .$(@__MODULE__); $(@__MODULE__).allrun()")
+
 end # module Fu_Price_plate_examples
+nothing
