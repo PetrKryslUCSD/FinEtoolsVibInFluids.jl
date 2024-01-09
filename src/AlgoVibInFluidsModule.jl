@@ -146,7 +146,7 @@ function modal(modeldata::FDataDict)
     		for k in wet_boundary_fes.conn[i]
     			for m in 1:3
     				dof = u.dofnums[k, m]
-    				uk[m] = (dof != 0 && dof <= nfreedofs(u) ? v[dof, mode] : 0.0)
+    				uk[m] = (1 <= dof <= nfreedofs(u) ? v[dof, mode] : 0.0)
     			end
     			vn[i, mode] += dot(pnormals[i], uk)
     		end
