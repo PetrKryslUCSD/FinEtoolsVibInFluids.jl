@@ -23,6 +23,7 @@ using FinEtoolsVibInFluids.LaplBEM
 using FinEtools.ForceIntensityModule: ForceIntensity
 using FinEtools.MeshModificationModule: meshboundary
 using FinEtools.MeshExportModule.VTK: vtkexportmesh
+using DelimitedFiles
 
 """
     AlgoVibInFluidsModule.exportfluidpressuremode(modeldata::FDataDict)
