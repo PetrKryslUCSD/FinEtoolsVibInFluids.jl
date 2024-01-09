@@ -309,13 +309,13 @@ version = "7.3.0"
 
 [[deps.FinEtoolsDeforLinear]]
 deps = ["Arpack", "FinEtools", "LinearAlgebra", "SparseArrays", "Statistics", "SuiteSparse", "Test"]
-git-tree-sha1 = "77e8d0248bf1d6fa4a4c5280f42bf65bb156a012"
+git-tree-sha1 = "d0ea8a4c422570f29044d8ed243276236194e468"
 uuid = "e9187c00-8bdd-11e9-1e70-7ba8303116a2"
-version = "2.1.1"
+version = "2.1.2"
 
 [[deps.FinEtoolsVibInFluids]]
 deps = ["Arpack", "DelimitedFiles", "FinEtools", "FinEtoolsDeforLinear", "FinEtoolsVoxelMesher", "LinearAlgebra", "SparseArrays", "Statistics", "Test"]
-git-tree-sha1 = "73fc2e5817a779af24ed2860cb57641591136a2b"
+path = ".."
 uuid = "bec31ec3-4858-4ad8-9f9e-aabdaa4a593b"
 version = "1.1.1"
 
