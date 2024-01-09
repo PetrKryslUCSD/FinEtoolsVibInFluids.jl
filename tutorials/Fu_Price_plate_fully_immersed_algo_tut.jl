@@ -106,15 +106,16 @@ modeldata =  FDataDict("fens"=> fens, "regions"=>  [region1], "essential_bcs"=>[
 # Solve for the in-vacuo free vibration modes
 modeldata = AlgoDeforLinearModule.modal(modeldata)
 
+# Export free-vibration modes in air for visualization.
 u = modeldata["u"]
 v = modeldata["W"]
-  File = "algo.vtk"
-  vectors = []
-  for mode in 1:length(modeldata["omega"])
+File = "Fu_Price_plate_fully_immersed_algo_tut-dry-modes.vtk"
+vectors = []
+for mode in 1:length(modeldata["omega"])
     scattersysvec!(u, v[:, mode])
     push!(vectors, ("mode$mode", deepcopy(u.values)))
 end
-  vtkexportmesh(File, fens, fes; vectors = vectors)
+vtkexportmesh(File, fens, fes; vectors = vectors)
 
 println("Dry angular frequencies: $(modeldata["omega"]) [rad/s]")
 println("Reference dry ang. fre.: $(dreffs) [rad/s]")

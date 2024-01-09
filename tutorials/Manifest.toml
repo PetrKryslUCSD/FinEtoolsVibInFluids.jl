@@ -2,7 +2,7 @@
 
 julia_version = "1.10.0"
 manifest_format = "2.0"
-project_hash = "fbce962c3af9049476e10ef8ac9147b4207a1d4a"
+project_hash = "bd68481526f6ee8c7941eae064e93c886e3ebd44"
 
 [[deps.AbstractFFTs]]
 deps = ["LinearAlgebra"]
@@ -317,7 +317,7 @@ version = "2.1.2"
 deps = ["Arpack", "DelimitedFiles", "FinEtools", "FinEtoolsDeforLinear", "FinEtoolsVoxelMesher", "LinearAlgebra", "SparseArrays", "Statistics", "Test"]
 path = ".."
 uuid = "bec31ec3-4858-4ad8-9f9e-aabdaa4a593b"
-version = "1.1.1"
+version = "1.1.2"
 
 [[deps.FinEtoolsVoxelMesher]]
 deps = ["FinEtools", "Images", "LinearAlgebra", "MappedArrays", "NIfTI", "Random", "Statistics", "Test"]
@@ -378,6 +378,12 @@ deps = ["Artifacts", "JLLWrappers", "Libdl"]
 git-tree-sha1 = "ca0f6bf568b4bfc807e7537f081c81e35ceca114"
 uuid = "e33a78d0-f292-5ffc-b300-72abe9b543c8"
 version = "2.10.0+0"
+
+[[deps.IOCapture]]
+deps = ["Logging", "Random"]
+git-tree-sha1 = "d75853a0bdbfb1ac815478bacd89cd27b550ace6"
+uuid = "b5f81e59-6552-4d32-b1f0-c071b021bf89"
+version = "0.2.3"
 
 [[deps.IfElse]]
 git-tree-sha1 = "debdd00ffef04665ccbb3e150747a77560e8fad1"
@@ -643,6 +649,12 @@ version = "0.9.1"
 [[deps.LinearAlgebra]]
 deps = ["Libdl", "OpenBLAS_jll", "libblastrampoline_jll"]
 uuid = "37e2e46d-f89d-539d-b4ee-838fcccc9c8e"
+
+[[deps.Literate]]
+deps = ["Base64", "IOCapture", "JSON", "REPL"]
+git-tree-sha1 = "bad26f1ccd99c553886ec0725e99a509589dcd11"
+uuid = "98b081ad-f1c9-55d3-8b20-4c87d4299306"
+version = "2.16.1"
 
 [[deps.LogExpFunctions]]
 deps = ["DocStringExtensions", "IrrationalConstants", "LinearAlgebra"]
