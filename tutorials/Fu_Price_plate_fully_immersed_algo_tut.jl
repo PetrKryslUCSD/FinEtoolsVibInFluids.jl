@@ -68,7 +68,7 @@ rhow = 1000*phun("KG*M^-3");
 Length= 10e3*phun("MM"); Width= 10e3*phun("MM"); Height= 0.238e3*phun("MM");
 # The mesh is quite coarse, but still provides engineering accuracy for the
 # angular frequencies.
-nHeight = 4; nLength  = 2*10; nWidth = nLength;
+nHeight = 4; nLength  = 4*3; nWidth = nLength;
 tolerance = Height/nHeight/100;
 
 # The reference angular frequencies in radians per second. The dry frequencies:
@@ -105,6 +105,16 @@ modeldata =  FDataDict("fens"=> fens, "regions"=>  [region1], "essential_bcs"=>[
 
 # Solve for the in-vacuo free vibration modes
 modeldata = AlgoDeforLinearModule.modal(modeldata)
+
+u = modeldata["u"]
+v = modeldata["W"]
+  File = "algo.vtk"
+  vectors = []
+  for mode in 1:length(modeldata["omega"])
+    scattersysvec!(u, v[:, mode])
+    push!(vectors, ("mode$mode", deepcopy(u.values)))
+end
+  vtkexportmesh(File, fens, fes; vectors = vectors)
 
 println("Dry angular frequencies: $(modeldata["omega"]) [rad/s]")
 println("Reference dry ang. fre.: $(dreffs) [rad/s]")
