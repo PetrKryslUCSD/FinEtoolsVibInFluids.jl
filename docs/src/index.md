@@ -1,15 +1,7 @@
 # FinEtoolsVibInFluids Documentation
 
-## Manual
-
-The description of the types and the functions, organized by module and/or other logical principle.
 
 ```@contents
-Pages = [
-    "man/types.md",
-    "man/functions.md",
-]
-Depth = 2
 ```
 
 ## Conceptual guide
@@ -21,4 +13,20 @@ Pages = [
     "guide/guide.md",
 ]
 Depth = 1
+```
+
+## Manual
+
+The description of the types and the functions, organized by module and/or other logical principle.
+
+```@contents
+Pages = [
+    "man/man.md",
+]
+Depth = 2
+```
+
+## Index
+
+```@index
 ```

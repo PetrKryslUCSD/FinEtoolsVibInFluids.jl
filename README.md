@@ -14,9 +14,13 @@ using `FinEtools` to solve problems of free vibration in fluids.
 
 ## News
 
-- 01/07/2023: Updated for FinEtools 7.3.0. Moved tutorials into the package tree.
 
-[Past news](oldnews.md)
+- 02/28/2024: Updated for FinEtools 8. 
+- 01/07/2023: Updated for FinEtools 7.f3.0. Moved tutorials into the package tree.
+
+
+[Past news](#past-news)
+
 
 ## Tutorials
 
@@ -51,3 +55,9 @@ Pkg.instantiate()
 There are a number of examples. The examples may
 be executed as described in the  [conceptual guide to
 `FinEtools`](https://petrkryslucsd.github.io/FinEtools.jl/latest).
+
+
+## <a name="past-news"></a>Past news
+
+- 08/23/2020: Added a separate tutorial package, [FinEtoolsVibInFluidsTutorials.jl](https://petrkryslucsd.github.io/FinEtoolsVibInFluidsTutorials.jl)).
+- 08/18/2020: Added tutorials.

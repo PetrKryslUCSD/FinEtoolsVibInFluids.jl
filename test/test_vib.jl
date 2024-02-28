@@ -122,7 +122,7 @@ function plate_completely_wet()
 			vn[i, mode] /= nnperel
 		end
 	end
-    @show size(vn)
+    # @show size(vn)
 	
 	# scalars = []
 	# for mode in 1:neigvs
@@ -164,8 +164,8 @@ function plate_completely_wet()
 	    end
 	end
 	raM = (raM +raM')/2;# it should be symmetric, but make sure
-    @show rK
-    @show raM
+    # @show rK
+    # @show raM
 
     #@show rK, rM, raM
 	decomp = eigen(rK, rM+raM)
@@ -174,7 +174,7 @@ function plate_completely_wet()
 end # plate_completely_wet
 
 function test()
-	@show angular_frequencies = plate_completely_wet()
+	angular_frequencies = plate_completely_wet()
 	@test norm(angular_frequencies - [8.64673912672756, 22.463163136168948, 54.24478379306806, 72.16460600046824, 81.89085075349693]) <= 1.0e-5
 	true
 end
