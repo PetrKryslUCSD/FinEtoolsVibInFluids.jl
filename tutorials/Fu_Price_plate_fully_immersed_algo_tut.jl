@@ -65,10 +65,10 @@ rho = 7850*phun("KG*M^-3");# mass density
 # The fluid properties correspond to water.
 rhow = 1000*phun("KG*M^-3");
 # Dimensions of the plate: it is quite massive.
-Length= 10e3*phun("MM"); Width= 10e3*phun("MM"); Height= 0.238e3*phun("MM");
+Length= 10*phun("M"); Width= 10*phun("M"); Height= 0.238*phun("M");
 # The mesh is quite coarse, but still provides engineering accuracy for the
 # angular frequencies.
-nHeight = 4; nLength  = 4*3; nWidth = nLength;
+nHeight = 4; nLength  = 4*5; nWidth = nLength;
 tolerance = Height/nHeight/100;
 
 # The reference angular frequencies in radians per second. The dry frequencies:

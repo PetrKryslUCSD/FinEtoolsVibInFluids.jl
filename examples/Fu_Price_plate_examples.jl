@@ -58,7 +58,7 @@ function plate_free_vibration_solver()
     K = stiffness(femm, massem, geom, u)
     M = mass(femm, massem, geom, u)
     
-    d,v,nev,nconv = eigs(K+OmegaShift*M, M; nev=neigvs, which=:SM,  explicittransform=:none)
+    d,v,nconv = eigs(K+OmegaShift*M, M; nev=neigvs, which=:SM,  explicittransform=:none)
     d = d .- OmegaShift;
 
     return Dict("fens"=>fens, "femm"=>femm, "geom"=>geom, "u"=>u, "eigenvectors"=>v, "eigenvalues"=>d)
@@ -89,6 +89,7 @@ function plate_dry()
 end # plate_dry
 
 function plate_one_quarter_wet()
+	@info "Plate one-quarter wet"
 	model = plate_free_vibration_solver()
 
 	fens = model["fens"]
@@ -165,6 +166,7 @@ function plate_one_quarter_wet()
 end # plate_wet
 
 function plate_completely_wet()
+	@info "Plate completely wet"
 	# Reference 7.35, 20.2, 50.45, 70.41, 78.85 [angular frequency, radians per second]
 	
 	model = plate_free_vibration_solver()
